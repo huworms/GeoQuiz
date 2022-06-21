@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun mostrarPorcentaje(view: View){
         var porcentaje: Float=(aciertos.toFloat()/questionBank.size.toFloat())*100
-        
+
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.CEILING
         Snackbar.make(view,
