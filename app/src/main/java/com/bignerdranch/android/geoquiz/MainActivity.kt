@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     private var currentIndex=0
 
 
-
+    /* prueba */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
