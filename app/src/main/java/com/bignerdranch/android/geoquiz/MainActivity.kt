@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.bignerdranch.android.geoquiz.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 import java.math.RoundingMode
@@ -17,16 +18,8 @@ private const val TAG= "MainActivity"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val quizViewModel: QuizViewModel by viewModels()
 
-    private val questionBank= listOf(
-        Question(R.string.question_australia, true),
-        Question(R.string.question_oceans, true),
-        Question(R.string.question_mideast, false),
-        Question(R.string.question_africa, false),
-        Question(R.string.question_americas, true),
-        Question(R.string.question_asia, true))
-
-    private var currentIndex=0
     private var aciertos=0
 
 
@@ -38,13 +31,8 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate(Bundle?) called")
         binding=ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        /*trueButton.setOnClickListener { view: View ->
-           /* Toast.makeText(this, R.string.correct_toast,
-                Toast.LENGTH_SHORT).show()*/
-            Snackbar.make(view,
-                R.string.correct_toast,
-                Snackbar.LENGTH_SHORT).show()
-        }*/
+        Log.d(TAG, "Got a QuizViewModel: $quizViewModel")
+
         binding.trueButton.setOnClickListener {  view:View->
             checkAnswer(true, view)
             checkBotonesRespuesta()
@@ -56,24 +44,26 @@ class MainActivity : AppCompatActivity() {
 
         }
         binding.nextButton.setOnClickListener { view:View->
-            if(currentIndex==(questionBank.size-1))
-                mostrarPorcentaje(view)
-            currentIndex=(currentIndex+1)%questionBank.size
+            /*if(currentIndex==(questionBank.size-1))
+                mostrarPorcentaje(view)*/
+            /*currentIndex=(currentIndex+1)%questionBank.size*/
+            quizViewModel.movetoNext();
             updateQuestion()
             checkBotonesRespuesta()
 
         }
 
         binding.backButton.setOnClickListener {  view:View->
-            if(currentIndex==0)
+          /*  if(currentIndex==0)
                 currentIndex=6
-            currentIndex=(currentIndex-1)%questionBank.size
+            currentIndex=(currentIndex-1)%questionBank.size*/
             updateQuestion()
             checkBotonesRespuesta()
         }
 
         binding.questionTextView.setOnClickListener{ view:View ->
-            currentIndex=(currentIndex+1)%questionBank.size
+            /*currentIndex=(currentIndex+1)%questionBank.size*/
+            quizViewModel.movetoNext();
             updateQuestion()
         }
         updateQuestion()
@@ -105,24 +95,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateQuestion(){
-        val questionTextResId=questionBank[currentIndex].textResId
+        /*val questionTextResId=questionBank[currentIndex].textResId*/
+        val questionTextResId=quizViewModel.currentQuestionText
         binding.questionTextView.setText(questionTextResId)
 
     }
 
     private fun mostrarPorcentaje(view: View){
-        var porcentaje: Float=(aciertos.toFloat()/questionBank.size.toFloat())*100
+       /* var porcentaje: Float=(aciertos.toFloat()/questionBank.size.toFloat())*100
         
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.CEILING
         Snackbar.make(view,
             "Tu porcentaje de aciertos es: "+df.format(porcentaje)+"%",
             Snackbar.LENGTH_SHORT).show()
-
+*/
     }
 
     private fun checkAnswer(userAnswer: Boolean,view:View){
-        val correctAnswer=questionBank[currentIndex].answer
+        /*val correctAnswer=questionBank[currentIndex].answer*/
+        val correctAnswer=quizViewModel.currentQuestionAnswer
 
         val messageResId=if(userAnswer==correctAnswer){
             aciertos++
