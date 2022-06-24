@@ -1,5 +1,6 @@
 package com.bignerdranch.android.geoquiz
 
+import android.content.Intent
 import android.icu.number.NumberFormatter
 import android.icu.number.Precision
 import androidx.appcompat.app.AppCompatActivity
@@ -51,6 +52,11 @@ class MainActivity : AppCompatActivity() {
             updateQuestion()
             checkBotonesRespuesta()
 
+        }
+
+        binding.chetButton.setOnClickListener {
+            val intent=Intent(this, CheatActivity::class.java)
+            startActivity(intent)
         }
 
         binding.backButton.setOnClickListener {  view:View->
