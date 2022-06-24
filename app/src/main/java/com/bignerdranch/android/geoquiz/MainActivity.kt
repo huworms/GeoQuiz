@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             /*if(currentIndex==(questionBank.size-1))
                 mostrarPorcentaje(view)*/
             /*currentIndex=(currentIndex+1)%questionBank.size*/
-            quizViewModel.movetoNext();
+            quizViewModel.movetoNext()
             updateQuestion()
             checkBotonesRespuesta()
 
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.questionTextView.setOnClickListener{ view:View ->
             /*currentIndex=(currentIndex+1)%questionBank.size*/
-            quizViewModel.movetoNext();
+            quizViewModel.movetoNext()
             updateQuestion()
         }
         updateQuestion()

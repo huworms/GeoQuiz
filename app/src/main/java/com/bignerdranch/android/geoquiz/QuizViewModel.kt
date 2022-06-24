@@ -32,6 +32,7 @@ class QuizViewModel : ViewModel() {
         get()=questionBank[currentIndex].textResId
 
     fun movetoNext(){
+      //  Log.d(TAG, "Updating question text", Exception())
         currentIndex=(currentIndex+1)%questionBank.size
     }
 
