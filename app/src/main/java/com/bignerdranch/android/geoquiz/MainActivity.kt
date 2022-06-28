@@ -1,5 +1,6 @@
 package com.bignerdranch.android.geoquiz
 
+import android.app.Activity
 import android.content.Intent
 import android.icu.number.NumberFormatter
 import android.icu.number.Precision
@@ -9,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.bignerdranch.android.geoquiz.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
@@ -20,6 +22,14 @@ private const val TAG= "MainActivity"
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val quizViewModel: QuizViewModel by viewModels()
+    private val cheatLauncher=registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if(result.resultCode== Activity.RESULT_OK){
+            quizViewModel.isCheater=
+                result.data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false)?:false
+        }
+    }
 
     private var aciertos=0
 
@@ -55,8 +65,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.chetButton.setOnClickListener {
-            val intent=Intent(this, CheatActivity::class.java)
-            startActivity(intent)
+            /*val intent=Intent(this, CheatActivity::class.java)*/
+            val answerIsTrue=quizViewModel.currentQuestionAnswer
+            val intent= CheatActivity.newIntent(this@MainActivity, answerIsTrue)
+            /*startActivity(intent)*/
+            cheatLauncher.launch(intent)
         }
 
         binding.backButton.setOnClickListener {  view:View->
@@ -122,11 +135,16 @@ class MainActivity : AppCompatActivity() {
         /*val correctAnswer=questionBank[currentIndex].answer*/
         val correctAnswer=quizViewModel.currentQuestionAnswer
 
-        val messageResId=if(userAnswer==correctAnswer){
+        /*val messageResId=if(userAnswer==correctAnswer){
             aciertos++
             R.string.correct_toast
         } else {
             R.string.incorrect_toast
+        }*/
+        val messageResId= when {
+            quizViewModel.isCheater -> R.string.judgment_toast
+            userAnswer==correctAnswer -> R.string.correct_toast
+            else -> R.string.incorrect_toast
         }
         Snackbar.make(view,
             messageResId,
