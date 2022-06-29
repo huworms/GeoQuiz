@@ -36,6 +36,7 @@ class CheatActivity : AppCompatActivity() {
         }
         setResult(Activity.RESULT_OK, data)
     }
+    /* prueba */
 
     companion object{
         fun newIntent(packageContext: Context, answerIsTrue: Boolean): Intent {
